@@ -5,33 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
+    <style>
+      img {
+        height: 20px;
+        vertical-align: middle;
+      }
+
+      div {
+        margin: 1em;
+      }
+    </style>
   </head>
+
   <body>
+    <h1>Country API result</h1>
+    <input type="text" id="country" placeholder="type something" />
+    <button id="search">Search</button>
     <div class="result"></div>
     <script>
       class myFetch {
-        constructor() {
-          this.name = name;
-          this.doIt();
+        constructor(url, title) {
+          this.title = title;
+          this.url = "https://restcountries.eu/rest/v2/" + url;
+          this.init();
         }
 
-        doIt() {
-          console.log("This is the class");
+        init() {
+          //here the h1 in javasrcipt, and in the order of not showing twice, it deletes it first and then put it there
+          //           document.querySelector("#title").innerHTML = ''
+
+          // document.querySelector("#title").insertAdjacentHTML('beforeend', `<h1>${this.title}</h1>`)
+
+          document
+            .querySelector("button")
+            .addEventListener("click", event => this.search());
+
           fetch("https://restcountries.eu/rest/v2/all")
             .then(response => response.json())
-            .then(countries => this.doLoop(countries));
+            //we ONLY have the data here
+            .then(countries => {
+              //we have to save the data here, because we'll filter it, and we have to save it somewhere first
+              this.countries = countries;
+              //use return if you use => func with curly brackets
+              return this.doLoop(this.countries);
+            });
+        }
+
+        search() {
+          let newCountry = document.querySelector("#country").value;
+          console.log(newCountry);
+          let result = document.querySelector(".result");
+          //console.log(this.countries);
+          //this console log the value of filter
+          let newCountryArray = this.countries;
+          // --> so it's always start filtering on all the countries
+          newCountryArray = newCountryArray.filter(item =>
+            item.name.includes(newCountry)
+          );
+          console.log(this.countries);
+          //print it out
+
+          result.innerHTML = " ";
+          if (Object.keys(newCountryArray).length > 0) {
+            this.doLoop(newCountryArray);
+          } else {
+            result.innerHTML = "not found";
+          }
         }
 
         doLoop(countries) {
           countries.forEach(country => {
             this.render(country);
           });
-          console.log("ok doloop");
         }
 
         lang(languages) {
+          // return (
+          //           Object.keys(languages).length < 2 ?
+          //               "language is" :
+          //               "languages are "
+          //       )
           let listOfLanguages = languages.map(language => language.name);
           return listOfLanguages.join(" ");
+        }
+
+        showlistOf(list, property) {
+          return list
+            .map(
+              //name is a string no . notation but []
+              item => item[property]
+            )
+            .join(", ");
         }
 
         render(country) {
@@ -47,7 +111,7 @@
         }
       }
 
-      const CountryApi = new myFetch();
+      new myFetch();
     </script>
   </body>
 </html>
