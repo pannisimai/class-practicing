@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="result"></div>
+    <script>
+      class myFetch {
+        constructor() {
+          this.name = name;
+          this.doIt();
+        }
+
+        doIt() {
+          console.log("This is the class");
+          fetch("https://restcountries.eu/rest/v2/all")
+            .then(response => response.json())
+            .then(countries => this.doLoop(countries));
+        }
+
+        doLoop(countries) {
+          countries.forEach(country => {
+            this.render(country);
+          });
+          console.log("ok doloop");
+        }
+
+        lang(languages) {
+          let listOfLanguages = languages.map(language => language.name);
+          return listOfLanguages.join(" ");
+        }
+
+        render(country) {
+          document.querySelector(".result").insertAdjacentHTML(
+            "beforeend",
+            `<div>
+                    <img src="${country.flag}" style="height:20px">${
+              country.name
+            } the capital is ${country.capital} the population is ${
+              country.population
+            }  ${this.lang(country.languages)}</div>`
+          );
+        }
+      }
+
+      const CountryApi = new myFetch();
+    </script>
+  </body>
+</html>

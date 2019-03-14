@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    function showCountry(countries) {
+      countries.forEach(country => {
+        console.log(country.name);
+      });
+    }
+
+    function YouBettaFetchBetch() {
+      fetch("https://restcountries.eu/rest/v2/all").then(res =>
+        res
+          .json()
+          .then(countries => showCountry(countries))
+          .catch(err => console.log(`error: ${err}`))
+      );
+    }
+
+    YouBettaFetchBetch();
+  </script>
+</html>
